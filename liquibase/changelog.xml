@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+    <changeSet id="1" author="vivek">
+        <createTable tableName="users">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="email" type="varchar(255)">
+                <constraints unique="true" nullable="false" />
+            </column>
+            <column name="phone" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="password" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="resetToken" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="resetTokenExpiration" type="datetime">
+                <constraints nullable="true" />
+            </column>
+            <column name="createdAt" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false" />
+            </column>
+            <column name="updatedAt" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2" author="vivek">
+        <createTable tableName="category_products">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints unique="true" nullable="false" />
+            </column>
+            <column name="description" type="text">
+                <constraints nullable="true" />
+            </column>
+            <column name="createdAt" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false" />
+            </column>
+            <column name="updatedAt" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="3" author="vivek">
+        <createTable tableName="products">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="price" type="int">
+                <constraints nullable="false" />
+            </column>
+            <column name="rating" type="float">
+                <constraints nullable="true" />
+            </column>
+            <column name="discount" type="float">
+                <constraints nullable="true" />
+            </column>
+            <column name="category" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="userId" type="int">
+                <constraints nullable="false" foreignKeyName="fk_products_user"
+                    references="users(id)" deleteCascade="true" />
+            </column>
+            <column name="categoryId" type="int">
+                <constraints nullable="false" foreignKeyName="fk_products_category"
+                    references="category_products(id)" deleteCascade="true" />
+            </column>
+            <column name="createdAt" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false" />
+            </column>
+            <column name="updatedAt" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="4" author="vivek">
+        <dropColumn tableName="products" columnName="category" />
+    </changeSet>
+
+    <changeSet id="5" author="vivek">
+        <createTable tableName="cart">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="userId" type="int">
+                <constraints nullable="false" foreignKeyName="fk_cart_user" references="users(id)"
+                    deleteCascade="true" />
+            </column>
+            <column name="createdAt" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false" />
+            </column>
+            <column name="updatedAt" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="6" author="vivek">
+        <createTable tableName="cart_items">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="quantity" type="int">
+                <constraints nullable="false" />
+            </column>
+            <column name="productId" type="int">
+                <constraints nullable="false" foreignKeyName="fk_cartitems_product"
+                    references="products(id)" deleteCascade="true" />
+            </column>
+            <column name="cartId" type="int">
+                <constraints nullable="false" foreignKeyName="fk_cartitems_cart"
+                    references="cart(id)" deleteCascade="true" />
+            </column>
+            <column name="createdAt" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false" />
+            </column>
+            <column name="updatedAt" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="7" author="vivek">
+        <createTable tableName="orders">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="userId" type="int">
+                <constraints nullable="false" foreignKeyName="fk_orders_users"
+                    references="users(id)" deleteCascade="true" />
+            </column>
+            <column name="totalAmount" type="float">
+                <constraints nullable="false" />
+            </column>
+            <column name="isCancelled" type="boolean" defaultValueBoolean="false">
+                <constraints nullable="false" />
+            </column>
+            <column name="status" type="varchar(255)" defaultValue="pending">
+                <constraints nullable="false" />
+            </column>
+            <column name="createdAt" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false" />
+            </column>
+            <column name="updatedAt" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="8" author="vivek">
+        <createTable tableName="order_items">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="orderId" type="int">
+                <constraints nullable="false" foreignKeyName="fk_order_items_orders"
+                    references="orders(id)" deleteCascade="true" />
+            </column>
+            <column name="productId" type="int">
+                <constraints nullable="false" foreignKeyName="fk_order_items_products"
+                    references="products(id)" deleteCascade="true" />
+            </column>
+            <column name="quantity" type="int">
+                <constraints nullable="false" />
+            </column>
+            <column name="price" type="float">
+                <constraints nullable="false" />
+            </column>
+            <column name="createdAt" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false" />
+            </column>
+            <column name="updatedAt" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="9" author="vivek">
+        <createTable tableName="reviews">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="review" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="rating" type="float">
+                <constraints nullable="false" />
+            </column>
+            <column name="userId" type="int">
+                <constraints nullable="false" foreignKeyName="fk_reviews_users"
+                    references="users(id)" deleteCascade="true" />
+            </column>
+            <column name="productId" type="int">
+                <constraints nullable="false" foreignKeyName="fk_reviews_products"
+                    references="products(id)" deleteCascade="true" />
+            </column>
+            <column name="createdAt" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false" />
+            </column>
+            <column name="updatedAt" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+    </changeSet>
+
+
+</databaseChangeLog>
