@@ -27,10 +27,6 @@ class Env {
 
   @IsNotEmpty()
   @IsString()
-  public secret_key!: string;
-
-  @IsNotEmpty()
-  @IsString()
   public email_host!: string;
 
   @IsInt()
@@ -61,7 +57,6 @@ export const env = new Env();
   env.db_username= process.env.DB_USERNAME as string;
   env.db_password= process.env.DB_PASSWORD as string;
   env.port= Number(process.env.PORT as string);
-  env.secret_key= process.env.SECRET_KEY as string;
   env.email_host= process.env.EMAIL_HOST as string;
   env.email_port= Number(process.env.EMAIL_PORT as string);
   env.email_auth_user= process.env.EMAIL_AUTH_USER as string;

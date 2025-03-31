@@ -26,7 +26,7 @@ export class AuthMiddleware {
           res.status(401).json({ error: "Unauthorized", code: 401 });
         }
       } else {
-        res.status(401).json({ error: "Unauthorized", code: 401 });
+        res.status(401).json({ error: "1:Unauthorized", code: 401 });
       }
     } else {
       res.status(401).json({ error: "Unauthorized", code: 401 });

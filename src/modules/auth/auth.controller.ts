@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import { env } from "@configs";
 import nodemailer from "nodemailer";
-import { Bcrypt, InitRepository, InjectRepositories } from "@helpers";
+import { Bcrypt, InitRepository, InjectRepositories, JwtHelper } from "@helpers";
 import { TRequest, TResponse } from "@types";
 import { MoreThanOrEqual, Repository } from "typeorm";
 import { ForgotPasswordDto, LoginDto, NewPasswordDto, SignupDto, UpdateUserDto } from "./dto";
@@ -44,7 +44,7 @@ export class AuthController {
         error.statusCode = 500;
       }
 
-      res.status(400).json({ error: err });
+      res.status(400).json({ error: error });
     }
   };
 
@@ -73,14 +73,7 @@ export class AuthController {
         return;
       }
 
-      const token = jwt.sign(
-        {
-          id: user.id,
-          ...(email ? { email: user.email } : { phone: user.phone }),
-        },
-        env.secret_key,
-        { expiresIn: "1h" },
-      );
+      const token = JwtHelper.encode({ id: user.id });
       res.status(200).json({ success: true, token: token });
       return;
     } catch (err: unknown) {
@@ -89,7 +82,7 @@ export class AuthController {
         error.statusCode = 500;
       }
 
-      res.status(400).json({ error: err });
+      res.status(400).json({ error: error });
     }
   };
 
@@ -128,7 +121,7 @@ export class AuthController {
       if (!error.statusCode) {
         error.statusCode = 500;
       }
-      res.status(400).json({ error: err });
+      res.status(400).json({ error: error });
     }
   };
 
@@ -159,7 +152,7 @@ export class AuthController {
       if (!error.statusCode) {
         error.statusCode = 500;
       }
-      res.status(400).json({ error: err });
+      res.status(400).json({ error: error });
     }
   };
 
@@ -189,7 +182,7 @@ export class AuthController {
       if (!error.statusCode) {
         error.statusCode = 500;
       }
-      res.status(400).json({ error: err });
+      res.status(400).json({ error: error });
     }
   };
 }

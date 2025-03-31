@@ -1,24 +1,24 @@
 import { Constants } from "@configs";
-import { IsEmail, IsNotEmpty, IsNumber, IsString, Length, Matches, MaxLength } from "class-validator";
+import { IsEmail, IsNotEmpty, IsNumber, IsOptional, IsString, Length, Matches, MaxLength } from "class-validator";
 
 export class UpdateUserDto {
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   @IsEmail()
   @MaxLength(Constants.EMAIL_MAX_LENGTH)
   email: string;
 
-  @IsNotEmpty()
   @IsString()
+  @IsOptional()
   phone: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   @MaxLength(Constants.FIRST_NAME_MAX_LENGTH)
   name: string;
 
+  @IsOptional()
   @IsString()
-  @IsNotEmpty()
   @Matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).*$/, {
     message: "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character",
   })

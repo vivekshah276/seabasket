@@ -8,7 +8,7 @@ import methodOverride from "method-override";
 import { DB, env } from "@configs";
 import { Cors, EnvValidator, HandleUnhandledPromise, Log } from "@helpers";
 import Routes from "./routes";
-import { UserEntity } from "@entities";
+import { CartEntity, CartItemsEntity, CategoryProductEntity, OrderEntity, OrderItemEntity, ProductEntity, ReviewsEntity, UserEntity } from "@entities";
 
 dotenv.config();
 
@@ -26,7 +26,7 @@ export default class App {
       username: env.db_username,
       password: env.db_password,
       database: env.dbName,
-      entities: [UserEntity],
+      entities: [UserEntity, ProductEntity, CategoryProductEntity, CartEntity, CartItemsEntity, OrderEntity, OrderItemEntity, ReviewsEntity],
     });
 
     // Handle Unhandled Promise Rejections
