@@ -23,12 +23,15 @@ export class ProductController {
   public getProducts = async (req: TRequest, res: TResponse) => {
     try {
       const allProducts = await this.productRepository.find();
+
       res.status(200).json({ success: true, allproducts: allProducts });
     } catch (err: unknown) {
       const error = err as CustomError;
+
       if (!error.statusCode) {
         error.statusCode = 500;
       }
+
       res.status(error.statusCode).json({ error: error });
     }
   };
@@ -42,9 +45,11 @@ export class ProductController {
       res.status(200).json({ success: true, product: product });
     } catch (err: unknown) {
       const error = err as CustomError;
+
       if (!error.statusCode) {
         error.statusCode = 500;
       }
+
       res.status(error.statusCode).json({ error: error });
     }
   };
@@ -57,11 +62,13 @@ export class ProductController {
       const categoryProduct = await this.categoryProductRepository.findOne({
         where: { name: category },
       });
+
       if (!categoryProduct) {
         const error: CustomError = new Error("Category Not found");
         error.statusCode = 404;
         throw error;
       }
+
       const categoryId = categoryProduct.id;
 
       // Check if product already exists in this category
@@ -83,13 +90,16 @@ export class ProductController {
         categoryId,
       });
       await this.productRepository.save(product);
+
       res.status(201).json({ success: true, product: product });
       return;
     } catch (err: unknown) {
       const error = err as CustomError;
+
       if (!error.statusCode) {
         error.statusCode = 500;
       }
+
       res.status(error.statusCode).json({ error: error });
     }
   };
@@ -99,17 +109,22 @@ export class ProductController {
     try {
       const prodId = Number(req.params.productId);
       const product = await this.productRepository.findOne({ where: { id: prodId } });
+
       if (!product) {
         res.status(404).json({ message: "No Product Found" });
         return;
       }
+
       await this.productRepository.delete(prodId);
+
       res.status(200).json({ success: true, message: "product deleted successfully" });
     } catch (err: unknown) {
       const error = err as CustomError;
+
       if (!error.statusCode) {
         error.statusCode = 500;
       }
+
       res.status(error.statusCode).json({ error: error });
     }
   };
@@ -117,9 +132,11 @@ export class ProductController {
   //get all the category list - Home
   public getCategory = async (req: TRequest, res: TResponse) => {
     const allCategory = await this.categoryProductRepository.find();
+
     if (!allCategory) {
       throw new Error("No Category Product");
     }
+
     res.status(200).json({ success: true, allCategory: allCategory });
   };
 
@@ -128,18 +145,23 @@ export class ProductController {
     const { name } = req.dto;
     try {
       const isExistcategory = await this.categoryProductRepository.findOne({ where: { name: name } });
+
       if (isExistcategory) {
         res.status(400).json({ message: "Category already exist" });
         return;
       }
+
       const category = await this.categoryProductRepository.create(req.dto);
       this.categoryProductRepository.save(category);
+
       res.status(201).json({ success: true, category: category });
     } catch (err: unknown) {
       const error = err as CustomError;
+
       if (!error.statusCode) {
         error.statusCode = 500;
       }
+
       res.status(error.statusCode).json({ error: error });
     }
   };
@@ -180,12 +202,15 @@ export class ProductController {
         where: whereClause,
         order: orderClause,
       });
+
       res.status(200).json({ success: true, product: product });
     } catch (err: unknown) {
       const error = err as CustomError;
+
       if (!error.statusCode) {
         error.statusCode = 500;
       }
+
       res.status(error.statusCode).json({ error: error });
     }
   };
@@ -207,9 +232,11 @@ export class ProductController {
       res.status(200).json({ success: true, trendProducts });
     } catch (err: unknown) {
       const error = err as CustomError;
+
       if (!error.statusCode) {
         error.statusCode = 500;
       }
+
       res.status(error.statusCode).json({ error: error });
     }
   };
@@ -229,9 +256,11 @@ export class ProductController {
       res.status(200).json({ success: true, product, category });
     } catch (err: unknown) {
       const error = err as CustomError;
+
       if (!error.statusCode) {
         error.statusCode = 500;
       }
+
       res.status(error.statusCode).json({ error: error });
     }
   };

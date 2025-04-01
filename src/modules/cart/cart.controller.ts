@@ -17,10 +17,12 @@ export class CartController {
   constructor() {
     InjectRepositories(this);
   }
-  // post Cart
+
+  // Post Cart
   public postCart = async (req: TRequest, res: TResponse): Promise<void> => {
     try {
       const { productId, quantity } = req.body;
+
       if (!productId || !quantity) {
         const error = new Error("Product and Quantity required") as CustomError;
         error.statusCode = 400;
@@ -28,7 +30,9 @@ export class CartController {
       }
 
       // Check if the user has an active cart
-      let cart = await this.cartRepository.findOne({ where: { user: { id: req.user.id } } });
+      let cart = await this.cartRepository.findOne({
+        where: { user: { id: req.user.id } },
+      });
 
       if (!cart) {
         cart = this.cartRepository.create({ user: { id: req.user.id } });
@@ -55,20 +59,23 @@ export class CartController {
       res.status(200).json({ success: true, cartItem, message: "Product added to cart" });
     } catch (err: unknown) {
       const error = err as CustomError;
+
       if (!error.statusCode) {
         error.statusCode = 500;
       }
+
       res.status(error.statusCode).json({ error: error });
     }
   };
 
-  // get Cart
+  // Get Cart
   public getCart = async (req: TRequest, res: TResponse): Promise<void> => {
     try {
       // Find the cart for the current user
       const cart = await this.cartRepository.findOne({
         where: { userId: req.user.id },
       });
+
       if (!cart || cart === null) {
         res.status(404).json({ message: "No Cart Found" });
         return;
@@ -93,14 +100,16 @@ export class CartController {
       res.status(200).json({ success: true, cart, cartItems });
     } catch (err: unknown) {
       const error = err as CustomError;
+
       if (!error.statusCode) {
         error.statusCode = 500;
       }
+
       res.status(error.statusCode).json({ error: error });
     }
   };
 
-  //remove item from cart
+  // Remove Item from Cart
   public removeCartItems = async (req: TRequest, res: TResponse): Promise<void> => {
     try {
       const userId = req.user.id;
@@ -108,6 +117,7 @@ export class CartController {
 
       // Find the cart associated with the user
       const cart = await this.cartRepository.findOne({ where: { userId } });
+
       if (!cart) {
         throw new Error("Cart not found") as CustomError;
       }
@@ -129,9 +139,11 @@ export class CartController {
       res.status(200).json({ success: true, message: "Item removed" });
     } catch (err: unknown) {
       const error = err as CustomError;
+
       if (!error.statusCode) {
         error.statusCode = 500;
       }
+
       res.status(error.statusCode).json({ error: error });
     }
   };

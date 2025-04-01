@@ -1,14 +1,15 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn, OneToMany } from "typeorm";
 import { UserEntity } from "./user.entity";
 import { OrderItemEntity } from "./orderItems.entity";
+import { enums } from "@types";
 
 @Entity("orders")
 export class OrderEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({type:"int"})
-  userId: number; 
+  @Column({ type: "int" })
+  userId: number;
 
   @ManyToOne(() => UserEntity, { onDelete: "CASCADE" })
   @JoinColumn({ name: "userId" })
@@ -20,10 +21,14 @@ export class OrderEntity {
   @Column({ type: "boolean", default: false })
   isCancelled: boolean;
 
-  @Column({ type: "varchar", default: "pending" })
+  @Column({
+    type: "enum",
+    enum: enums.OrderStatus,
+    default: enums.OrderStatus.Pending,
+  })
   status: string;
 
-  @OneToMany(() => OrderItemEntity, (orderItem) => orderItem.order)
+  @OneToMany(() => OrderItemEntity, orderItem => orderItem.order)
   orderItems: OrderItemEntity[];
 
   @CreateDateColumn()
