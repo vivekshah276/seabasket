@@ -13,6 +13,14 @@
         "argsIgnorePattern": "_"
       }
     ],
+    "padding-line-between-statements": [
+      "error",
+      {
+        "blankLine": "always",
+        "prev": ["if", "else"],
+        "next": "*"
+      }
+    ],
     "@typescript-eslint/indent": [
       "error",
       2,
