@@ -1,4 +1,4 @@
-import { isNotEmpty, IsNotEmpty, IsNumber, Min } from "class-validator";
+import { IsNotEmpty, IsNumber } from "class-validator";
 
 export class CartDto {
   @IsNumber()

@@ -43,8 +43,7 @@ export class AuthController {
       if (!error.statusCode) {
         error.statusCode = 500;
       }
-
-      res.status(400).json({ error: error });
+      res.status(error.statusCode).json({ error: error });
     }
   };
 
@@ -81,8 +80,7 @@ export class AuthController {
       if (!error.statusCode) {
         error.statusCode = 500;
       }
-
-      res.status(400).json({ error: error });
+      res.status(error.statusCode).json({ error: error });
     }
   };
 
@@ -121,7 +119,7 @@ export class AuthController {
       if (!error.statusCode) {
         error.statusCode = 500;
       }
-      res.status(400).json({ error: error });
+      res.status(error.statusCode).json({ error: error });
     }
   };
 
@@ -152,7 +150,7 @@ export class AuthController {
       if (!error.statusCode) {
         error.statusCode = 500;
       }
-      res.status(400).json({ error: error });
+      res.status(error.statusCode).json({ error: error });
     }
   };
 
@@ -182,7 +180,7 @@ export class AuthController {
       if (!error.statusCode) {
         error.statusCode = 500;
       }
-      res.status(400).json({ error: error });
+      res.status(error.statusCode).json({ error: error });
     }
   };
 }
