@@ -1,0 +1,53 @@
+version: "3.8"
+
+services:
+  app:
+    image: my-node-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    # depends_on:
+    #   - db
+    networks:
+      - backend
+    volumes:
+      - .:/app
+      - /app/node_modules
+
+  db:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "5432:5433"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - backend
+
+  liquibase:
+    image: liquibase/liquibase:latest
+    volumes:
+      - ./migrations:/liquibase/changelog
+    depends_on:
+      - db
+    environment:
+      LIQUIBASE_URL: jdbc:postgresql://db:5432/${DB_NAME}
+      LIQUIBASE_USERNAME: ${DB_USERNAME}
+      LIQUIBASE_PASSWORD: ${DB_PASSWORD}
+    command: ["yarn", "run", "liquibase:update"]
+    networks:
+      - backend
+
+volumes:
+  postgres_data:
+
+networks:
+  backend:
